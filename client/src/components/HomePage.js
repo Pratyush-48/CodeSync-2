@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Check } from "lucide-react";
 import "./HomePage.css";
@@ -97,6 +97,8 @@ const HomePage = () => {
   const navigate = useNavigate();
   const aboutRef = useRef(null);
   const featuresRef = useRef(null);
+  const heroVideoRef = useRef(null);
+  const featureVideoRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: aboutRef,
     offset: ["start 0.8", "end 0.2"],
@@ -123,17 +125,67 @@ const HomePage = () => {
     }),
   };
 
+  useEffect(() => {
+    const videos = [heroVideoRef.current, featureVideoRef.current].filter(Boolean);
+    if (!videos.length) return;
+
+    const tryPlay = (video) => {
+      if (!video || document.visibilityState !== "visible") return;
+      video.muted = true;
+      video.playsInline = true;
+      const playPromise = video.play();
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.catch(() => {});
+      }
+    };
+
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") {
+        videos.forEach((video) => tryPlay(video));
+      }
+    };
+
+    const handlers = new Map();
+    videos.forEach((video) => {
+      const onReady = () => tryPlay(video);
+      const onPause = () => tryPlay(video);
+      const onEnded = () => tryPlay(video);
+
+      handlers.set(video, { onReady, onPause, onEnded });
+      video.addEventListener("loadeddata", onReady);
+      video.addEventListener("pause", onPause);
+      video.addEventListener("ended", onEnded);
+      tryPlay(video);
+    });
+
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+      videos.forEach((video) => {
+        const handler = handlers.get(video);
+        if (!handler) return;
+        video.removeEventListener("loadeddata", handler.onReady);
+        video.removeEventListener("pause", handler.onPause);
+        video.removeEventListener("ended", handler.onEnded);
+      });
+    };
+  }, []);
+
   return (
     <div className="landing">
       <section className="hero">
         <div className="hero-shell">
           <video
+            ref={heroVideoRef}
             className="hero-video"
             src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4"
             autoPlay
             loop
             muted
             playsInline
+            preload="auto"
+            disablePictureInPicture
           />
           <div className="noise-overlay" />
           <div className="hero-gradient" />
@@ -253,12 +305,15 @@ const HomePage = () => {
               custom={0}
             >
               <video
+                ref={featureVideoRef}
                 className="feature-video"
                 src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260406_133058_0504132a-0cf3-4450-a370-8ea3b05c95d4.mp4"
                 autoPlay
                 loop
                 muted
                 playsInline
+                preload="auto"
+                disablePictureInPicture
               />
               <div className="feature-video-text">Code effortlessly</div>
             </motion.div>
