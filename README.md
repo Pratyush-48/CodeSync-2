@@ -1,7 +1,4 @@
-# CodeSync Deep Dive (Interview Walkthrough)
-
-This document is a detailed, interview-ready walkthrough of the CodeSync project. It explains how the system works end to end, why each part exists, how data flows through the system, and how you can describe the design choices with clarity and confidence. It also includes diagrams (DFD, sequence, UML, and use case) in Mermaid format so you can paste them into any Markdown viewer that supports Mermaid rendering.
-
+# CodeSync
 ## 1) Project Summary
 
 CodeSync is a real-time collaborative code editor designed for pair programming, interviews, mentoring, and remote teaching. The product goal is to give multiple users a shared coding room with synchronized editing, language switching, and shared compile output. The key promise is low-friction collaboration: users create or join a room, type together in one editor, and run code so everyone sees the same results. The system is split into a React frontend and a Node.js backend, with Socket.IO providing the real-time data layer and Express providing the REST endpoint for compilation. In production, the backend also serves the built frontend as static assets.
