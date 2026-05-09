@@ -179,7 +179,9 @@ const HomePage = () => {
           <video
             ref={heroVideoRef}
             className="hero-video"
-            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4"
+            //https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4
+            //https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4
+            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4"
             autoPlay
             loop
             muted
@@ -215,7 +217,7 @@ const HomePage = () => {
               />
             </div>
             <div className="hero-copy">
-              <motion.p
+              {/* <motion.p
                 className="hero-description"
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -224,7 +226,7 @@ const HomePage = () => {
                 Code together in real time from anywhere.
                 <br />
                 Share a room, sync instantly, and ship faster.
-              </motion.p>
+              </motion.p> */}
               <motion.button
                 className="cta-button"
                 initial={{ opacity: 0, y: 16 }}
@@ -307,7 +309,7 @@ const HomePage = () => {
               <video
                 ref={featureVideoRef}
                 className="feature-video"
-                src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260406_133058_0504132a-0cf3-4450-a370-8ea3b05c95d4.mp4"
+                src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4"
                 autoPlay
                 loop
                 muted
