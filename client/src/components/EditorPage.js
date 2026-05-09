@@ -40,6 +40,9 @@ function EditorPage() {
   const codeRef = useRef(null);
   const outputRef = useRef("");
   const [socketConnected, setSocketConnected] = useState(false);
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth < 900 : false
+  );
 
   const Location = useLocation();
   const navigate = useNavigate();
@@ -135,6 +138,15 @@ function EditorPage() {
     };
   }, [roomId, navigate]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 900);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   if (!Location.state) {
     return <Navigate to="/" />;
   }
@@ -205,9 +217,25 @@ function EditorPage() {
     setIsCompileWindowOpen(!isCompileWindowOpen);
   };
 
+  const containerStyle = {
+    ...styles.container,
+    flexDirection: isMobile ? "column" : "row",
+  };
+  const sidebarStyle = {
+    ...styles.sidebar,
+    width: isMobile ? "100%" : "280px",
+    height: isMobile ? "auto" : "100%",
+    borderRight: isMobile ? "none" : styles.sidebar.borderRight,
+    borderBottom: isMobile ? "1px solid rgba(255,255,255,0.05)" : "none",
+  };
+  const editorAreaStyle = {
+    ...styles.editorArea,
+    minHeight: isMobile ? "60vh" : "auto",
+  };
+
   return (
-    <div style={styles.container}>
-      <div style={styles.sidebar}>
+    <div style={containerStyle}>
+      <div style={sidebarStyle}>
         <div style={styles.logoContainer}>
           <img 
             src="/images/code.png" 
@@ -252,7 +280,7 @@ function EditorPage() {
       </div>
 
       {/* Main Editor Area */}
-      <div style={styles.editorArea}>
+      <div style={editorAreaStyle}>
         <div style={styles.toolbar}>
           <div style={styles.languageSelector}>
             <i className="fas fa-code" style={styles.selectorIcon}></i>
@@ -270,11 +298,13 @@ function EditorPage() {
           </div>
         </div>
 
-        <Editor
-          socketRef={socketRef}
-          roomId={roomId}
-          onCodeChange={(code) => { codeRef.current = code; }}
-        />
+        <div style={styles.editorWrapper}>
+          <Editor
+            socketRef={socketRef}
+            roomId={roomId}
+            onCodeChange={(code) => { codeRef.current = code; }}
+          />
+        </div>
       </div>
 
      
@@ -341,7 +371,7 @@ function EditorPage() {
 const styles = {
   container: {
     display: 'flex',
-    height: '100vh',
+    minHeight: '100vh',
     backgroundColor: '#0f172a',
     color: '#e2e8f0',
     overflow: 'hidden',
@@ -473,7 +503,12 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    position: 'relative'
+    position: 'relative',
+    minHeight: 0
+  },
+  editorWrapper: {
+    flex: 1,
+    minHeight: 0
   },
   toolbar: {
     backgroundColor: 'rgba(15, 23, 42, 0.8)',
