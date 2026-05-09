@@ -238,7 +238,7 @@ function EditorPage() {
       <div style={sidebarStyle}>
         <div style={styles.logoContainer}>
           <img 
-            src="/images/code.png" 
+            src="/images/logo.png" 
             alt="Logo" 
             style={styles.logo} 
           />
