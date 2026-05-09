@@ -342,7 +342,7 @@ const HomePage = () => {
                 </li>
                 <li>
                   <Check size={16} />
-                  Live cursor and code sync
+                  Code sync
                 </li>
                 <li>
                   <Check size={16} />
